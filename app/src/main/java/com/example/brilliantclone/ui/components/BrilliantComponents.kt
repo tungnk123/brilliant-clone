@@ -79,7 +79,7 @@ fun BrilliantCard(
 ) {
     Box(
         modifier = modifier
-            .border(1.dp, Border, RoundedCornerShape(cornerRadius))
+            .border(1.5.dp, Border, RoundedCornerShape(cornerRadius))
             .background(Color.White, RoundedCornerShape(cornerRadius))
             .clip(RoundedCornerShape(cornerRadius))
             .then(if (onClick != null) Modifier.clickable { onClick() } else Modifier)

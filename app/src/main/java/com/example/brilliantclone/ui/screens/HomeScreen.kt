@@ -1,8 +1,12 @@
 package com.example.brilliantclone.ui.screens
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,6 +21,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -256,12 +261,47 @@ fun HomeScreen() {
                 if (index < currentCourses.lastIndex) {
                     Box(
                         modifier = Modifier
-                            .padding(start = 48.dp) // align with icon center (20dp card padding + 16dp card padding + 28dp = half of 56dp icon box)
+                            .padding(start = 48.dp)
                             .width(2.dp)
                             .height(8.dp)
                             .background(Color(0xFFE0DDD8))
                     )
                 }
+            }
+
+            // ── Colored feature sections
+            item { Spacer(Modifier.height(28.dp)) }
+            item {
+                ColoredSectionCard(
+                    title = "Daily Challenge",
+                    subtitle = "Streak: 7 days — keep it going",
+                    icon = Icons.Outlined.LocalFireDepartment,
+                    startColor = Color(0xFF7C4DFF),
+                    endColor = Color(0xFF9C6FFF),
+                    modifier = Modifier.padding(horizontal = 20.dp)
+                )
+            }
+            item { Spacer(Modifier.height(12.dp)) }
+            item {
+                ColoredSectionCard(
+                    title = "New for You",
+                    subtitle = "Curated picks based on your progress",
+                    icon = Icons.Outlined.AutoAwesome,
+                    startColor = Color(0xFF1A8FE3),
+                    endColor = Color(0xFF42B4FF),
+                    modifier = Modifier.padding(horizontal = 20.dp)
+                )
+            }
+            item { Spacer(Modifier.height(12.dp)) }
+            item {
+                ColoredSectionCard(
+                    title = "Continue Learning",
+                    subtitle = "Pick up where you left off",
+                    icon = Icons.Outlined.PlayCircle,
+                    startColor = Color(0xFFE87722),
+                    endColor = Color(0xFFFF9600),
+                    modifier = Modifier.padding(horizontal = 20.dp)
+                )
             }
         }
     }
@@ -271,14 +311,33 @@ fun HomeScreen() {
 
 @Composable
 fun CourseCard(course: Course, modifier: Modifier = Modifier) {
-    BrilliantCard(
-        modifier = modifier.fillMaxWidth().heightIn(min = 88.dp),
-        cornerRadius = 16.dp,
-        onClick = {}
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val shadowElevation by animateDpAsState(
+        targetValue = if (isPressed) 0.dp else 4.dp,
+        animationSpec = spring(dampingRatio = 0.6f, stiffness = 700f),
+        label = "card_shadow"
+    )
+    val offsetY by animateDpAsState(
+        targetValue = if (isPressed) 3.dp else 0.dp,
+        animationSpec = spring(dampingRatio = 0.6f, stiffness = 700f),
+        label = "card_offset"
+    )
+
+    Box(
+        modifier = modifier
+            .offset(y = offsetY)
+            .fillMaxWidth()
+            .heightIn(min = 88.dp)
+            .shadow(shadowElevation, RoundedCornerShape(16.dp), spotColor = Color(0x20000000))
+            .border(1.5.dp, Border, RoundedCornerShape(16.dp))
+            .background(Color.White, RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(16.dp))
+            .clickable(interactionSource = interactionSource, indication = null) {}
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(vertical = 6.dp)
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
         ) {
             Box(
                 modifier = Modifier
@@ -306,10 +365,70 @@ fun CourseCard(course: Course, modifier: Modifier = Modifier) {
                 modifier = Modifier.weight(1f)
             )
             if (course.hasProgress) {
+                Spacer(Modifier.width(8.dp))
                 Box(
                     modifier = Modifier
                         .size(8.dp)
                         .background(Success, CircleShape)
+                )
+            }
+        }
+    }
+}
+
+// ─── Colored Section Card ─────────────────────────────────────────────────────
+
+@Composable
+fun ColoredSectionCard(
+    title: String,
+    subtitle: String,
+    icon: ImageVector,
+    startColor: Color,
+    endColor: Color,
+    modifier: Modifier = Modifier
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val offsetY by animateDpAsState(
+        targetValue = if (isPressed) 3.dp else 0.dp,
+        animationSpec = spring(dampingRatio = 0.6f, stiffness = 700f),
+        label = "section_offset"
+    )
+
+    Box(
+        modifier = modifier
+            .offset(y = offsetY)
+            .fillMaxWidth()
+            .height(88.dp)
+            .shadow(if (isPressed) 0.dp else 4.dp, RoundedCornerShape(16.dp), spotColor = startColor.copy(alpha = 0.3f))
+            .clip(RoundedCornerShape(16.dp))
+            .background(Brush.linearGradient(listOf(startColor, endColor)))
+            .clickable(interactionSource = interactionSource, indication = null) {}
+            .padding(horizontal = 20.dp),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier.size(32.dp)
+            )
+            Spacer(Modifier.width(16.dp))
+            Column {
+                Text(
+                    text = title,
+                    fontFamily = PlusJakartaSansFontFamily,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+                Spacer(Modifier.height(2.dp))
+                Text(
+                    text = subtitle,
+                    fontFamily = PlusJakartaSansFontFamily,
+                    fontSize = 12.sp,
+                    color = Color.White.copy(alpha = 0.82f)
                 )
             }
         }
@@ -328,22 +447,15 @@ fun BrilliantBottomNav(
         modifier = Modifier.fillMaxWidth(),
         color = Color.White,
         tonalElevation = 0.dp,
-        shadowElevation = 0.dp
+        shadowElevation = 8.dp
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .border(
-                    width = 1.dp,
-                    color = NavBorder,
-                    shape = RoundedCornerShape(0.dp)
-                )
-        ) {
+        Column {
+            HorizontalDivider(thickness = 1.dp, color = NavBorder)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .navigationBarsPadding()
-                    .height(58.dp),
+                    .height(60.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -351,24 +463,38 @@ fun BrilliantBottomNav(
                     val isSelected = index == selectedIndex
                     Box(
                         modifier = Modifier
-                            .size(56.dp)
-                            .clip(RoundedCornerShape(12.dp))
-                            .clickable { onItemSelected(index) },
+                            .width(72.dp)
+                            .fillMaxHeight()
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null
+                            ) { onItemSelected(index) },
                         contentAlignment = Alignment.Center
                     ) {
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
-                            Icon(
-                                imageVector = item.icon,
-                                contentDescription = item.label,
-                                tint = if (isSelected) Purple else TextSecondary,
-                                modifier = Modifier.size(22.dp)
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .background(
+                                        if (isSelected) Purple.copy(alpha = 0.1f) else Color.Transparent,
+                                        RoundedCornerShape(10.dp)
+                                    )
+                                    .padding(horizontal = 12.dp, vertical = 4.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    imageVector = item.icon,
+                                    contentDescription = item.label,
+                                    tint = if (isSelected) Purple else TextSecondary,
+                                    modifier = Modifier.size(24.dp)
+                                )
+                            }
                             Spacer(Modifier.height(2.dp))
                             Text(
                                 text = item.label,
+                                fontFamily = PlusJakartaSansFontFamily,
                                 fontSize = 10.sp,
                                 fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
                                 color = if (isSelected) Purple else TextSecondary
