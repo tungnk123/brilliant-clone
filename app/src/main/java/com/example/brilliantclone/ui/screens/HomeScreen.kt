@@ -322,14 +322,13 @@ fun CourseCard(course: Course, modifier: Modifier = Modifier) {
 
     // Outer box reserves space for the shadow layer below
     Box(modifier = modifier.fillMaxWidth().padding(bottom = pressOffset)) {
-        // Shadow layer — stays fixed, simulates 3D depth
+        // Shadow layer — same color as stroke for clean 3D look
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(min = 88.dp)
                 .offset(y = pressOffset)
-                .border(1.5.dp, Color(0xFFCCCAC4), RoundedCornerShape(16.dp))
-                .background(Color(0xFFE8E5DF), RoundedCornerShape(16.dp))
+                .background(Border, RoundedCornerShape(16.dp))
         )
         // Face layer — slides down on press
         Box(
