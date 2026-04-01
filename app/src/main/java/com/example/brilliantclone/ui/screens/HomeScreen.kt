@@ -313,64 +313,65 @@ fun HomeScreen() {
 fun CourseCard(course: Course, modifier: Modifier = Modifier) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
-    val shadowElevation by animateDpAsState(
-        targetValue = if (isPressed) 0.dp else 4.dp,
-        animationSpec = spring(dampingRatio = 0.6f, stiffness = 700f),
-        label = "card_shadow"
-    )
-    val offsetY by animateDpAsState(
-        targetValue = if (isPressed) 3.dp else 0.dp,
-        animationSpec = spring(dampingRatio = 0.6f, stiffness = 700f),
-        label = "card_offset"
+    val pressOffset = 4.dp
+    val currentOffset by animateDpAsState(
+        targetValue = if (isPressed) pressOffset else 0.dp,
+        animationSpec = spring(dampingRatio = 0.55f, stiffness = 600f),
+        label = "card_press"
     )
 
-    Box(
-        modifier = modifier
-            .offset(y = offsetY)
-            .fillMaxWidth()
-            .heightIn(min = 88.dp)
-            .shadow(shadowElevation, RoundedCornerShape(16.dp), spotColor = Color(0x20000000))
-            .border(1.5.dp, Border, RoundedCornerShape(16.dp))
-            .background(Color.White, RoundedCornerShape(16.dp))
-            .clip(RoundedCornerShape(16.dp))
-            .clickable(interactionSource = interactionSource, indication = null) {}
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
+    // Outer box reserves space for the shadow layer below
+    Box(modifier = modifier.fillMaxWidth().padding(bottom = pressOffset)) {
+        // Shadow layer — stays fixed, simulates 3D depth
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 88.dp)
+                .offset(y = pressOffset)
+                .border(1.5.dp, Color(0xFFCCCAC4), RoundedCornerShape(16.dp))
+                .background(Color(0xFFE8E5DF), RoundedCornerShape(16.dp))
+        )
+        // Face layer — slides down on press
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 88.dp)
+                .offset(y = currentOffset)
+                .border(1.5.dp, Border, RoundedCornerShape(16.dp))
+                .background(Color.White, RoundedCornerShape(16.dp))
+                .clip(RoundedCornerShape(16.dp))
+                .clickable(interactionSource = interactionSource, indication = null) {}
         ) {
-            Box(
-                modifier = Modifier
-                    .size(56.dp)
-                    .background(
-                        course.iconBg.copy(alpha = 0.22f),
-                        RoundedCornerShape(14.dp)
-                    ),
-                contentAlignment = Alignment.Center
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
             ) {
-                Icon(
-                    imageVector = course.icon,
-                    contentDescription = null,
-                    tint = course.iconTint,
-                    modifier = Modifier.size(32.dp)
-                )
-            }
-            Spacer(Modifier.width(14.dp))
-            Text(
-                text = course.title,
-                fontFamily = PlusJakartaSansFontFamily,
-                fontSize = 15.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = TextPrimary,
-                modifier = Modifier.weight(1f)
-            )
-            if (course.hasProgress) {
-                Spacer(Modifier.width(8.dp))
                 Box(
                     modifier = Modifier
-                        .size(8.dp)
-                        .background(Success, CircleShape)
+                        .size(56.dp)
+                        .background(course.iconBg.copy(alpha = 0.22f), RoundedCornerShape(14.dp)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = course.icon,
+                        contentDescription = null,
+                        tint = course.iconTint,
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
+                Spacer(Modifier.width(14.dp))
+                Text(
+                    text = course.title,
+                    fontFamily = PlusJakartaSansFontFamily,
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = TextPrimary,
+                    modifier = Modifier.weight(1f)
                 )
+                if (course.hasProgress) {
+                    Spacer(Modifier.width(8.dp))
+                    Box(modifier = Modifier.size(8.dp).background(Success, CircleShape))
+                }
             }
         }
     }
@@ -389,47 +390,43 @@ fun ColoredSectionCard(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
-    val offsetY by animateDpAsState(
-        targetValue = if (isPressed) 3.dp else 0.dp,
-        animationSpec = spring(dampingRatio = 0.6f, stiffness = 700f),
-        label = "section_offset"
+    val pressOffset = 4.dp
+    val currentOffset by animateDpAsState(
+        targetValue = if (isPressed) pressOffset else 0.dp,
+        animationSpec = spring(dampingRatio = 0.55f, stiffness = 600f),
+        label = "section_press"
     )
 
-    Box(
-        modifier = modifier
-            .offset(y = offsetY)
-            .fillMaxWidth()
-            .height(88.dp)
-            .shadow(if (isPressed) 0.dp else 4.dp, RoundedCornerShape(16.dp), spotColor = startColor.copy(alpha = 0.3f))
-            .clip(RoundedCornerShape(16.dp))
-            .background(Brush.linearGradient(listOf(startColor, endColor)))
-            .clickable(interactionSource = interactionSource, indication = null) {}
-            .padding(horizontal = 20.dp),
-        contentAlignment = Alignment.CenterStart
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = Color.White,
-                modifier = Modifier.size(32.dp)
-            )
-            Spacer(Modifier.width(16.dp))
-            Column {
-                Text(
-                    text = title,
-                    fontFamily = PlusJakartaSansFontFamily,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
-                )
-                Spacer(Modifier.height(2.dp))
-                Text(
-                    text = subtitle,
-                    fontFamily = PlusJakartaSansFontFamily,
-                    fontSize = 12.sp,
-                    color = Color.White.copy(alpha = 0.82f)
-                )
+    Box(modifier = modifier.fillMaxWidth().padding(bottom = pressOffset)) {
+        // Shadow layer
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(88.dp)
+                .offset(y = pressOffset)
+                .clip(RoundedCornerShape(16.dp))
+                .background(startColor.copy(alpha = 0.5f))
+        )
+        // Face layer
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(88.dp)
+                .offset(y = currentOffset)
+                .clip(RoundedCornerShape(16.dp))
+                .background(Brush.linearGradient(listOf(startColor, endColor)))
+                .clickable(interactionSource = interactionSource, indication = null) {}
+                .padding(horizontal = 20.dp),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(imageVector = icon, contentDescription = null, tint = Color.White, modifier = Modifier.size(32.dp))
+                Spacer(Modifier.width(16.dp))
+                Column {
+                    Text(title, fontFamily = PlusJakartaSansFontFamily, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                    Spacer(Modifier.height(2.dp))
+                    Text(subtitle, fontFamily = PlusJakartaSansFontFamily, fontSize = 12.sp, color = Color.White.copy(alpha = 0.82f))
+                }
             }
         }
     }
