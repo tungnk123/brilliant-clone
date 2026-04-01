@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.brilliantclone.ui.theme.Border
+import com.example.brilliantclone.ui.theme.PlusJakartaSansFontFamily
 import com.example.brilliantclone.ui.theme.Purple
 import com.example.brilliantclone.ui.theme.TextPrimary
 import com.example.brilliantclone.ui.theme.TextSecondary
@@ -62,7 +63,7 @@ fun OffsetButton(
                 .clickable(interactionSource, indication = null) { onClick() },
             contentAlignment = Alignment.Center
         ) {
-            Text(text, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = textColor)
+            Text(text, fontFamily = PlusJakartaSansFontFamily, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = textColor)
         }
     }
 }
@@ -120,23 +121,18 @@ fun CategoryTile(
                 .clip(RoundedCornerShape(14.dp)),
             contentAlignment = Alignment.Center
         ) {
-            Box(
-                modifier = Modifier
-                    .size(44.dp)
-                    .background(iconBg, RoundedCornerShape(10.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = label,
-                    tint = iconTint,
-                    modifier = Modifier.size(26.dp)
-                )
-            }
+            // Icon trực tiếp trên nền trắng — không có inner colored box
+            Icon(
+                imageVector = icon,
+                contentDescription = label,
+                tint = iconTint,
+                modifier = Modifier.size(30.dp)
+            )
         }
         Spacer(Modifier.height(6.dp))
         Text(
             text = label,
+            fontFamily = PlusJakartaSansFontFamily,
             fontSize = 12.sp,
             fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
             color = if (selected) Purple else TextPrimary

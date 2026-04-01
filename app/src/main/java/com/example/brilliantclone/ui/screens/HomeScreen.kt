@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.brilliantclone.ui.components.*
 import com.example.brilliantclone.ui.theme.*
+import com.example.brilliantclone.ui.theme.PlusJakartaSansFontFamily
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
@@ -196,6 +197,7 @@ fun HomeScreen() {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
                             text = currentCategory.sectionTitle,
+                            fontFamily = PlusJakartaSansFontFamily,
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
                             color = TextPrimary,
@@ -204,6 +206,7 @@ fun HomeScreen() {
                         Spacer(Modifier.height(4.dp))
                         Text(
                             text = currentCategory.sectionSubtitle,
+                            fontFamily = PlusJakartaSansFontFamily,
                             fontSize = 14.sp,
                             color = TextSecondary,
                             lineHeight = 20.sp
@@ -252,20 +255,25 @@ fun CourseCard(course: Course, modifier: Modifier = Modifier) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(
                 modifier = Modifier
-                    .size(52.dp)
-                    .background(course.iconBg, RoundedCornerShape(12.dp)),
+                    .size(56.dp)
+                    .background(
+                        // Rất nhạt — chỉ hint màu, không solid
+                        course.iconBg.copy(alpha = 0.18f),
+                        RoundedCornerShape(12.dp)
+                    ),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = course.icon,
                     contentDescription = null,
                     tint = course.iconTint,
-                    modifier = Modifier.size(28.dp)
+                    modifier = Modifier.size(30.dp)
                 )
             }
             Spacer(Modifier.width(14.dp))
             Text(
                 text = course.title,
+                fontFamily = PlusJakartaSansFontFamily,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = TextPrimary,
