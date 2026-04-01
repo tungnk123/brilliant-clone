@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.brilliantclone.HomeScreenPaparazziTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-04-01T08:14:13" hostname="Tungs-Mac-mini.local" time="1.911">
+  <properties/>
+  <testcase name="homeScreen_darkMode" classname="com.example.brilliantclone.HomeScreenPaparazziTest" time="1.816"/>
+  <testcase name="homeScreen" classname="com.example.brilliantclone.HomeScreenPaparazziTest" time="0.095"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[WARNING: A Java agent has been loaded dynamically (/Users/tungdoan/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy-agent/1.14.16/4a451ee6484abac3a498df0f3b33ed00a6fced4d/byte-buddy-agent-1.14.16.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+Apr 01, 2026 3:14:14 PM app.cash.paparazzi.internal.PaparazziLogger logAndroidFramework
+INFO: Settings [3]: Can't get key animator_duration_scale from content://settings/global
+Apr 01, 2026 3:14:15 PM app.cash.paparazzi.internal.PaparazziLogger logAndroidFramework
+INFO: Settings [3]: Can't get key animator_duration_scale from content://settings/global
+]]></system-err>
+</testsuite>

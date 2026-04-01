@@ -84,7 +84,7 @@ fun BrilliantCard(
             .clip(RoundedCornerShape(cornerRadius))
             .then(if (onClick != null) Modifier.clickable { onClick() } else Modifier)
     ) {
-        Column(modifier = Modifier.padding(16.dp), content = content)
+        Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp), content = content)
     }
 }
 
@@ -111,22 +111,21 @@ fun CategoryTile(
     ) {
         Box(
             modifier = Modifier
-                .size(64.dp)
+                .size(76.dp)
                 .border(
                     width = if (selected) 2.dp else 1.5.dp,
                     color = if (selected) Purple else Border,
-                    shape = RoundedCornerShape(14.dp)
+                    shape = RoundedCornerShape(16.dp)
                 )
-                .background(Color.White, RoundedCornerShape(14.dp))
-                .clip(RoundedCornerShape(14.dp)),
+                .background(Color.White, RoundedCornerShape(16.dp))
+                .clip(RoundedCornerShape(16.dp)),
             contentAlignment = Alignment.Center
         ) {
-            // Icon trực tiếp trên nền trắng — không có inner colored box
             Icon(
                 imageVector = icon,
                 contentDescription = label,
                 tint = iconTint,
-                modifier = Modifier.size(30.dp)
+                modifier = Modifier.size(34.dp)
             )
         }
         Spacer(Modifier.height(6.dp))

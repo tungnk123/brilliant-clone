@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -131,7 +132,7 @@ private val coursesByCategory = mapOf(
 
 // ─── Nav ─────────────────────────────────────────────────────────────────────
 
-private data class NavItem(val label: String, val icon: ImageVector, val activeIcon: ImageVector)
+data class NavItem(val label: String, val icon: ImageVector, val activeIcon: ImageVector)
 
 private val navItems = listOf(
     NavItem("Home", Icons.Outlined.Home, Icons.Outlined.Home),
@@ -186,58 +187,81 @@ fun HomeScreen() {
                 Spacer(Modifier.height(28.dp))
             }
 
-            // ── Section header: title + subtitle + hero icon
+            // ── Section header with lavender gradient band (#3 fix)
             item {
-                Row(
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(
+                                    Color(0xFFEEEBFF),
+                                    Color(0xFFF4F2FF),
+                                    Color(0xFFFAF9FF),
+                                    Color.White
+                                )
+                            )
+                        )
                 ) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = currentCategory.sectionTitle,
-                            fontFamily = PlusJakartaSansFontFamily,
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = TextPrimary,
-                            lineHeight = 28.sp
-                        )
-                        Spacer(Modifier.height(4.dp))
-                        Text(
-                            text = currentCategory.sectionSubtitle,
-                            fontFamily = PlusJakartaSansFontFamily,
-                            fontSize = 14.sp,
-                            color = TextSecondary,
-                            lineHeight = 20.sp
-                        )
-                    }
-                    Spacer(Modifier.width(16.dp))
-                    // Hero icon
-                    Box(
+                    Row(
                         modifier = Modifier
-                            .size(72.dp)
-                            .background(currentCategory.iconBg, RoundedCornerShape(18.dp)),
-                        contentAlignment = Alignment.Center
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp)
+                            .padding(top = 20.dp, bottom = 28.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(
-                            imageVector = currentCategory.heroIcon,
-                            contentDescription = null,
-                            tint = currentCategory.iconTint,
-                            modifier = Modifier.size(40.dp)
-                        )
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = currentCategory.sectionTitle,
+                                fontFamily = PlusJakartaSansFontFamily,
+                                fontSize = 28.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = TextPrimary,
+                                lineHeight = 34.sp
+                            )
+                            Spacer(Modifier.height(6.dp))
+                            Text(
+                                text = currentCategory.sectionSubtitle,
+                                fontFamily = PlusJakartaSansFontFamily,
+                                fontSize = 15.sp,
+                                color = TextSecondary,
+                                lineHeight = 22.sp
+                            )
+                        }
+                        Spacer(Modifier.width(16.dp))
+                        Box(
+                            modifier = Modifier
+                                .size(80.dp)
+                                .background(currentCategory.iconBg, RoundedCornerShape(20.dp)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = currentCategory.heroIcon,
+                                contentDescription = null,
+                                tint = currentCategory.iconTint,
+                                modifier = Modifier.size(46.dp)
+                            )
+                        }
                     }
                 }
-                Spacer(Modifier.height(28.dp))
             }
 
-            // ── Course cards
-            itemsIndexed(currentCourses) { _, course ->
+            // ── Course cards with connector lines (#2 fix)
+            itemsIndexed(currentCourses) { index, course ->
                 CourseCard(
                     course = course,
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )
-                Spacer(Modifier.height(10.dp))
+                // Connector line between cards (not after last)
+                if (index < currentCourses.lastIndex) {
+                    Box(
+                        modifier = Modifier
+                            .padding(start = 56.dp) // align with icon center
+                            .width(2.dp)
+                            .height(10.dp)
+                            .background(Color(0xFFE0DDD8))
+                    )
+                }
             }
         }
     }
@@ -248,18 +272,20 @@ fun HomeScreen() {
 @Composable
 fun CourseCard(course: Course, modifier: Modifier = Modifier) {
     BrilliantCard(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().heightIn(min = 96.dp),
         cornerRadius = 14.dp,
         onClick = {}
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(vertical = 6.dp)
+        ) {
             Box(
                 modifier = Modifier
-                    .size(56.dp)
+                    .size(64.dp)
                     .background(
-                        // Rất nhạt — chỉ hint màu, không solid
                         course.iconBg.copy(alpha = 0.18f),
-                        RoundedCornerShape(12.dp)
+                        RoundedCornerShape(14.dp)
                     ),
                 contentAlignment = Alignment.Center
             ) {
@@ -267,14 +293,14 @@ fun CourseCard(course: Course, modifier: Modifier = Modifier) {
                     imageVector = course.icon,
                     contentDescription = null,
                     tint = course.iconTint,
-                    modifier = Modifier.size(30.dp)
+                    modifier = Modifier.size(34.dp)
                 )
             }
-            Spacer(Modifier.width(14.dp))
+            Spacer(Modifier.width(16.dp))
             Text(
                 text = course.title,
                 fontFamily = PlusJakartaSansFontFamily,
-                fontSize = 15.sp,
+                fontSize = 17.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = TextPrimary,
                 modifier = Modifier.weight(1f)
