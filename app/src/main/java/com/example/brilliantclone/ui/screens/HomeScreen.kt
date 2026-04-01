@@ -214,18 +214,18 @@ fun HomeScreen() {
                             Text(
                                 text = currentCategory.sectionTitle,
                                 fontFamily = PlusJakartaSansFontFamily,
-                                fontSize = 28.sp,
+                                fontSize = 22.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = TextPrimary,
-                                lineHeight = 34.sp
+                                lineHeight = 28.sp
                             )
                             Spacer(Modifier.height(6.dp))
                             Text(
                                 text = currentCategory.sectionSubtitle,
                                 fontFamily = PlusJakartaSansFontFamily,
-                                fontSize = 15.sp,
+                                fontSize = 13.sp,
                                 color = TextSecondary,
-                                lineHeight = 22.sp
+                                lineHeight = 19.sp
                             )
                         }
                         Spacer(Modifier.width(16.dp))
@@ -296,11 +296,11 @@ fun CourseCard(course: Course, modifier: Modifier = Modifier) {
                     modifier = Modifier.size(32.dp)
                 )
             }
-            Spacer(Modifier.width(16.dp))
+            Spacer(Modifier.width(14.dp))
             Text(
                 text = course.title,
                 fontFamily = PlusJakartaSansFontFamily,
-                fontSize = 17.sp,
+                fontSize = 15.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = TextPrimary,
                 modifier = Modifier.weight(1f)

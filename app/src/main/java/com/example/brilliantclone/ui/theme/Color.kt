@@ -22,9 +22,9 @@ val BackgroundCream = Color(0xFFFAFAF0)
 val CardBg = Color(0xFFFFFFFF)
 
 val TextPrimary = Color(0xFF1B1B1B)
-val TextSecondary = Color(0xFF888888)
-val Border = Color(0xFFD0CFC8)
-val NavBorder = Color(0xFFE8E6E0)
+val TextSecondary = Color(0xFF666666)
+val Border = Color(0xFFEAE8E2)
+val NavBorder = Color(0xFFEEECE8)
 
 // Category icon background colors
 val MathBg = Color(0xFFEDE7FF)

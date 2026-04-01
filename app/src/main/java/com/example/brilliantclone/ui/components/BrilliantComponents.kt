@@ -79,7 +79,7 @@ fun BrilliantCard(
 ) {
     Box(
         modifier = modifier
-            .border(1.5.dp, Border, RoundedCornerShape(cornerRadius))
+            .border(1.dp, Border, RoundedCornerShape(cornerRadius))
             .background(Color.White, RoundedCornerShape(cornerRadius))
             .clip(RoundedCornerShape(cornerRadius))
             .then(if (onClick != null) Modifier.clickable { onClick() } else Modifier)
@@ -113,7 +113,7 @@ fun CategoryTile(
             modifier = Modifier
                 .size(76.dp)
                 .border(
-                    width = if (selected) 2.dp else 1.5.dp,
+                    width = if (selected) 1.5.dp else 1.dp,
                     color = if (selected) Purple else Border,
                     shape = RoundedCornerShape(16.dp)
                 )
