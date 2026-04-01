@@ -1,0 +1,19 @@
+# Gradle
+.gradle/
+build/
+local.properties
+
+# Android Studio
+*.iml
+.idea/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Paparazzi snapshots (generated, not source of truth)
+# Comment this out if you want to track snapshots in git
+# app/src/test/snapshots/
+
+# Keystore
+*.jks
+*.keystore
