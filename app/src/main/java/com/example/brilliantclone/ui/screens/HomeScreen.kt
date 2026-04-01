@@ -313,7 +313,7 @@ fun HomeScreen() {
 fun CourseCard(course: Course, modifier: Modifier = Modifier) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
-    val pressOffset = 6.dp
+    val pressOffset = 5.dp
     val currentOffset by animateDpAsState(
         targetValue = if (isPressed) pressOffset else 0.dp,
         animationSpec = spring(dampingRatio = 0.55f, stiffness = 600f),
@@ -390,7 +390,7 @@ fun ColoredSectionCard(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
-    val pressOffset = 6.dp
+    val pressOffset = 5.dp
     val currentOffset by animateDpAsState(
         targetValue = if (isPressed) pressOffset else 0.dp,
         animationSpec = spring(dampingRatio = 0.55f, stiffness = 600f),
