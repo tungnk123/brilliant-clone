@@ -97,10 +97,10 @@ private val categories = listOf(
 
 private val coursesByCategory = mapOf(
     0 to listOf(
-        Course("Mathematical Thinking", Icons.Outlined.Brush, MathIcon, MathBg, hasProgress = true),
+        Course("Mathematical Thinking", Icons.Outlined.Calculate, MathIcon, MathBg, hasProgress = true),
         Course("Proportional Reasoning", Icons.Outlined.DonutSmall, DataIcon, DataBg),
         Course("Negative Numbers", Icons.Outlined.ExposureNeg1, CSIcon, CSBg),
-        Course("Solving Equations", Icons.Outlined.Functions, PurpleLight, Purple),
+        Course("Solving Equations", Icons.Outlined.Functions, MathIcon, MathBg),
         Course("Geometry Fundamentals", Icons.Outlined.Hexagon, ScienceIcon, ScienceBg),
         Course("Probability", Icons.Outlined.Casino, LogicIcon, LogicBg),
     ),
@@ -108,7 +108,7 @@ private val coursesByCategory = mapOf(
         Course("Thinking in Code", Icons.Outlined.LightbulbCircle, MathIcon, MathBg, hasProgress = true),
         Course("Programming with Variables", Icons.Outlined.DataObject, CSIcon, CSBg),
         Course("Programming with Python", Icons.Outlined.Terminal, ScienceIcon, ScienceBg),
-        Course("Thinking in Python", Icons.Outlined.Code, PurpleLight, Purple),
+        Course("Thinking in Python", Icons.Outlined.Code, MathIcon, MathBg),
         Course("Algorithms", Icons.Outlined.AccountTree, DataIcon, DataBg),
     ),
     2 to listOf(
@@ -121,7 +121,7 @@ private val coursesByCategory = mapOf(
         Course("Physics Essentials", Icons.Outlined.Bolt, ScienceIcon, ScienceBg, hasProgress = true),
         Course("Chemistry Basics", Icons.Outlined.Science, MathIcon, MathBg),
         Course("Biology Fundamentals", Icons.Outlined.Biotech, DataIcon, DataBg),
-        Course("Astronomy", Icons.Outlined.NightShelter, PurpleLight, Purple),
+        Course("Astronomy", Icons.Outlined.Nightlight, CSIcon, CSBg),
     ),
     4 to listOf(
         Course("Logic Puzzles", Icons.Outlined.Extension, LogicIcon, LogicBg, hasProgress = true),
@@ -256,9 +256,9 @@ fun HomeScreen() {
                 if (index < currentCourses.lastIndex) {
                     Box(
                         modifier = Modifier
-                            .padding(start = 56.dp) // align with icon center
+                            .padding(start = 48.dp) // align with icon center (20dp card padding + 16dp card padding + 28dp = half of 56dp icon box)
                             .width(2.dp)
-                            .height(10.dp)
+                            .height(8.dp)
                             .background(Color(0xFFE0DDD8))
                     )
                 }
@@ -272,8 +272,8 @@ fun HomeScreen() {
 @Composable
 fun CourseCard(course: Course, modifier: Modifier = Modifier) {
     BrilliantCard(
-        modifier = modifier.fillMaxWidth().heightIn(min = 96.dp),
-        cornerRadius = 14.dp,
+        modifier = modifier.fillMaxWidth().heightIn(min = 88.dp),
+        cornerRadius = 16.dp,
         onClick = {}
     ) {
         Row(
@@ -282,9 +282,9 @@ fun CourseCard(course: Course, modifier: Modifier = Modifier) {
         ) {
             Box(
                 modifier = Modifier
-                    .size(64.dp)
+                    .size(56.dp)
                     .background(
-                        course.iconBg.copy(alpha = 0.18f),
+                        course.iconBg.copy(alpha = 0.22f),
                         RoundedCornerShape(14.dp)
                     ),
                 contentAlignment = Alignment.Center
@@ -293,7 +293,7 @@ fun CourseCard(course: Course, modifier: Modifier = Modifier) {
                     imageVector = course.icon,
                     contentDescription = null,
                     tint = course.iconTint,
-                    modifier = Modifier.size(34.dp)
+                    modifier = Modifier.size(32.dp)
                 )
             }
             Spacer(Modifier.width(16.dp))
